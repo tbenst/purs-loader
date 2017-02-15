@@ -49,6 +49,7 @@ module.exports = function purescriptLoader(source, map) {
     bundleNamespace: 'PS',
     bundle: false,
     warnings: true,
+    noErrors: false,
     output: 'output',
     src: [
       path.join('src', '**', '*.purs'),
@@ -97,7 +98,11 @@ module.exports = function purescriptLoader(source, map) {
       });
 
       cache.errors.forEach(error => {
-        compilation.errors.push(error);
+        if (!config.noErrors) {
+          compilation.errors.push(error);
+        } else {
+          compilation.warnings.push(warning);
+        }
       });
 
       callback()
